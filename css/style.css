@@ -1,0 +1,346 @@
+html {
+    font-family: system-ui;
+    height: 100%; /* Ensure the body takes full height */
+    margin: 0; /* Remove default margin */
+    padding:0;
+    overflow: hidden; /* Disable scrolling */
+    align-items: center; /* Vertically center */
+    justify-content: center; /* Horizontally center */
+}
+
+/* ============================= Introduction Section ============================= */
+
+/* introduction section */
+ #introduction-text {
+    display: block; /* Initially visible */
+    background-color: #ffffff;
+    padding: 5px;
+    margin: 2px auto;
+    width: 100%; /* Adjust width as needed */
+    max-width:1500px;
+    height:700px; /* Fixed height for scrollable area */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border-radius: 8px;
+    border: 1px solid #ccc; /* Optional: for visibility */
+}
+
+/* Styling for different text elements within the introduction */
+#introduction-text h1 {
+    font-size: 28px; /* Size of the heading */
+    margin-bottom:1px; /* Space below the heading */
+	color: #006400; /* Green color */
+}
+#introduction-text h2 {
+    font-size: 18px; /* Size of the heading */
+    margin-bottom: 1px; /* Space below the heading */
+	color: #006400 ; /* Green color */
+}
+#introduction-text p {
+    font-size: 16px; /* Size of paragraph text */
+    margin-bottom: 1px; /* Space below paragraphs */
+    font-weight: normal; /* Normal font weight */
+}
+
+#introduction-text label {
+    font-size: 16px; /* Size of the label text next to the checkbox */
+    display: inline-block; /* Align label with checkbox */
+    margin-top: 4 px; /* Space above the label */
+}
+
+#introduction-text ul {
+    list-style-type: disc; /* Use standard bullets */
+    padding-left: 20px; /* Indent the list */
+    margin-bottom: 2px; /* Space below the list */
+}
+
+#introduction-text li {
+    font-size: 14px; /* Size of list item text */
+    margin-bottom: 2px; /* Space between list items */
+    font-weight: normal; /* Normal font weight */
+    text-align: left; /* Align text to the left */
+}
+
+/* Custom style for checkbox */
+input[type="checkbox"] {
+    width: 30px; /* Custom width for checkbox */
+    height: 30px; /* Custom height for checkbox */
+    margin-right: 5px; /* Space between checkbox and label */
+    appearance: none; /* Remove default checkbox style */
+    border: 2px solid #ccc; /* Gray border */
+    border-radius: 4px; /* Rounded corners */
+    position: relative;
+    cursor: pointer;
+	vertical-align: middle; /* Align checkbox with text */
+}
+
+/* Style for checked state */
+input[type="checkbox"]:checked {
+    background-color: green; /* Green background when checked */
+    border-color: green; /* Green border when checked */
+}
+
+/* Adding a white check mark when checked */
+input[type="checkbox"]:checked::after {
+    content: '✔'; /* Check mark symbol */
+    color: white; /* White check mark */
+    font-size: 16px;
+    position: absolute;
+    top: -1px; /* Adjust vertical position */
+    left: 6px; /* Adjust horizontal position */
+}
+
+#uniLogo {
+    position: fixed; /* Fixed position to keep it on the right side of the viewport */
+    top: 16px; /* Adjust top spacing as needed */
+    right: 20px; /* Adjust right spacing to position closer or further from the edge */
+    width: 95px; /* Adjust width to resize the logo */
+    height: auto; /* Keeps the aspect ratio of the logo */
+    z-index: 1000; /* Ensure it appears above other content */
+}  
+   
+/* ============================= Notice Section ============================= */
+
+/* notice section */
+#notice {
+    position: relative;
+    background-color: #ffffff;
+    padding:1 px;
+    margin: 4px auto;
+    width: 100%;
+    max-width: 1050px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+#notice p {
+    font-size: 16px;
+    margin-bottom: 3px;
+    font-weight: bold;
+}
+
+#notice span {
+    color: #0066FF;
+    font-weight: bold;
+}
+
+/* ============================= Modals Section ============================= */
+
+/* modal styles */
+.modal {
+    display: none;  /* Modal is hidden by default */
+    position: fixed;  /* Make it appear over the content */
+    top: 50%;        /* Center vertically */
+    left: 50%;       /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for width/height offsets */
+    background-color: rgba(255, 255, 255, 1);
+    text-align: center;
+}
+
+.modal-content {
+    background-color: rgb(240,240,240);
+    padding: 10px;
+    border: 2px solid #888;
+    margin:auto;
+    width: 800px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+
+/* modal styles for help calibration */
+.modal_1 {
+    display: none;  /* Modal is hidden by default */
+    position: fixed;  /* Make it appear over the content */
+    top: 50%;        /* Center vertically */
+    left: 50%;       /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for width/height offsets */
+    background-color: rgba(255, 255, 255, 1);
+    text-align: center;
+    z-index: 9999;  /* Ensure it's on top */
+    width: 90vw;    /* Set modal width relative to viewport width */
+}
+
+.modal-content_1 {
+    padding: 5px;
+    border: 2px solid #888;
+    margin: auto;
+    width: 100%;    /* Relative width */
+    max-width: 800px;  /* Restrict the maximum width */
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;  /* Include padding in width/height calculations */
+}
+
+.img-fluid {
+    width: 100%;   /* Image will take full width of its container */
+    height: auto;  /* Maintain aspect ratio */
+    max-width: 650px; /* Limit the maximum width */
+    display: block;
+    margin: 0 auto;
+    object-fit:  contain /* Maintain aspect ratio, but may leave blank space (letterbox) */
+}
+
+
+.modal-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 8px;
+}
+
+.custom-image {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 10%;
+    margin-bottom: 10px;
+}
+
+/* ============================= Camera Section ============================= */
+
+/* camera styling */
+ #camera-feed {
+    max-width:50%;
+    object-fit: fill;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+/* ============================= Calibration Section ======================== */
+
+/* calibration and canvas styling */
+#calibration-container {
+    text-align: center;
+}
+
+/* button styling for calibration */
+.button {
+    width: 30px;
+    height: 30px;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid black;
+    color: white;
+    background-color: red;
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    overflow: hidden;
+    text-align: center;
+    opacity: 0.2;
+    position: fixed;
+}
+
+/* Calibration button positions */
+
+    #Pt1, #Pt2, #Pt3, #Pt4, #Pt5, #Pt6, #Pt7, #Pt8, #Pt9 {
+        position: absolute;
+    }
+	
+    /* regular set of points */
+    #Pt1 { top: 35%; left: 20%; }
+    #Pt2 { top: 35%; left: 50%; }
+    #Pt3 { top: 35%; left: 80%; }
+
+    #Pt4 { top: 60%; left: 20%; }
+    #Pt5 { top: 60%; left: 50%; }
+    #Pt6 { top: 60%; left: 80%; }
+
+    #Pt7 { top: 85%; left: 20%; }
+    #Pt8 { top: 85%; left: 50%; }
+    #Pt9 { top: 85%; left: 80%; }
+	
+
+/* ============================= Maps and Survey Section ======================== */
+
+/* map-container styling */
+.map-container {
+    position: absolute; /* Make sure the container fills the viewport */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full width of the viewport */
+    height: 100vh; /* Full height of the viewport */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent overflow and scrolling */
+    z-index: 1; /* Keep it on top of other content */
+}
+
+.map-container img {
+    position: absolute; /* Make the image fill the container */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit:  contain /* Maintain aspect ratio, but may leave blank space (letterbox) */
+}
+
+/* Ensure proper scaling on small screens */
+@media only screen and (max-width: 768px) {
+    .map-container {
+        width: 100vw; /* Full width of the viewport */
+        height: 100vh; /* Full height of the viewport */
+    }
+}
+
+.survey-image {
+    position: relative;
+    width: 80%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+
+/* ============================= webgazer Video Section ======================== */
+
+/* video feed styling */
+#webgazerVideoContainer {
+    position: relative;
+    display: block !important;
+    position: fixed !important;
+    top:0px !important;
+    left: 0px !important;
+    width: 320px !important;
+    height: 220px !important;
+    z-index: 9999 !important;
+}
+
+/* Adjust the size of the video element itself */
+#webgazerVideoFeed {
+    width: 100% !important; /* Ensure the video takes up 100% of the container's width */
+    height: 100% !important; /* Ensure the video takes up 100% of the container's height */
+    object-fit: cover;       /* Optionally, use object-fit to control how the video fits in the container */
+}
+
+#accuracy a{
+    background-color: #222;
+    color: #eee;
+    left: -15px;
+    padding-left: 80px;
+    padding-right: 40px;
+}
+
+#accuracy {
+    background-color: #222;
+    padding-left: inherit;
+}
+
+/*li {
+    padding-left: 10px;
+}*/
+
+/* Adjust for different devices with different screen sizes */
+@media only screen and (min-width: 481px) and (max-width: 1200px) {
+    .desk {
+        display: none; /* Hide desktop-specific elements */
+    }
+    .mob {
+        display: block; /* Show mobile-specific elements */
+    }
+}
