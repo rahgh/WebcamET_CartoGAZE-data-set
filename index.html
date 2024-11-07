@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="author" content="Rahimeh Gharibpour" /
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Stylesheet -->
+    <link id="size-stylesheet" rel="stylesheet" href="css/style.css" />
+  </head>
+<!-- Main body -->
+  <body>
+      <div id="introduction-text" style="display: block;">
+	      <img src="images/unigis.png" id="uniLogo" alt="unigis">
+          <h1><b>INTRODUCTION</b></h1>
+          <p>Thank you for participating in this study. My name is Rahimeh Gharibpour, and I am a Master's student at the Geoinformatics department of the University of Salzburg.</p>
+          <p>For my Master's thesis, I am studying the <b>use-cases and limitations of webcam-based cartography</b>. This study involves a cartographic user experiment designed to test the memorability of the road network and hydrographic landmarks on Google navigation maps, consisting of three sets of tasks (blocks), in total 30 map stimuli. The structure of the blocks is as follows:</p>
+          <ul>
+              <li>Block 1: 10 map stimuli focusing on the memorability of main roads and road junctions</li>
+              <li>Block 2: 10 map stimuli focusing on the memorability of major water bodies and rivers</li>
+              <li>Block 3: 10 map stimuli focusing on the memorability of the combination of the first two blocks</li>
+          </ul>
+          <p>Each experimental block will start with a training task to familiarize yourself with the experiment and to ensure you understand the map tasks correctly. Afterward, you will be presented with the main tasks for each of the three blocks. The experiment will last approximately <b>15 minutes</b>.</p>
+          <p>Throughout the experiment, your eye movements will be recorded based on the face images obtained from the camera of your computer and the calibration process. Therefore, the eye-tracker will be calibrated at the beginning of the session, with a maximum of three attempts.</p>
+          <h2>Please follow these guidelines prior to the experiment:</h2>
+          <ul>
+              <li>Close any unnecessary programs or applications on your computer.</li>
+              <li>Sit at an appropriate distance from the camera (50-60 cm), ensuring your eyes are clearly visible.</li>
+              <li>Try to use only your eyes to look around the screen while avoiding head movement.</li>
+              <li>Position and stabilize lighting in front of you rather than behind you, so the webcam can clearly see your face.</li>
+          </ul>
+          <p>After the test, you will be asked to complete a questionnaire to help me understand your background. Your biometric and demographic data will be aggregated and processed anonymously. Please note that:</p>
+          <ul>
+              <li>You can withdraw at any time and your data will be deleted if you withdraw.</li>
+              <li>You can access your anonymized data upon request.</li>
+			  <li>You can request correction or deletion of your data.</li>
+          </ul>
+          <p>As a final note, I kindly request each participant to review and sign this document, which grants permission to record and utilize their eye-movement data exclusively for scientific research purposes. By checking the box below, you confirm that you understand this information and freely consent to participate in this study.</p>
+          <p>If you have any questions, feel free to reach out to me at <a href="mailto:rah.gharibpour@gmail.com">rah.gharibpour@gmail.com </a>.</p>
+          <p>Thank you once again for your participation!</p>
+          <div style="text-align: center">
+			  <label>
+				  <input type="checkbox" id="consentCheckbox"> I understand this information and consent to participate in this study.
+			  </label>
+          </div>
+      </div>
+	   
+     <!-- notice _ element -->
+      <div id="notice" class="text" style="display: none;">
+        <p>Dear participant, this study is part of a research project. It will take approximately 15 minutes of your time.</p>
+        <p>It is a map memorability test & there will be 3 blocks, each including 10 maps.</p>
+        <p><span style="color: #0066FF;">We value your privacy and do not store any images from your camera.
+            It is not our intention to collect any personal data,
+            and you always have the right to request the removal of your data.</span></p>
+      </div>
+
+      <!-- Modals for Step-by-Step Instructions -->
+
+      <!-- Research Project Info Modal -->
+      <div id="research-info-modal" class="modal">
+        <div class="modal-content">
+          <img src="images/hello.png" class="custom-image" alt="Emoji">
+          <p>Please read and follow all the instructions carefully.</p>
+          <p style="text-align: center">
+            <button class="modal-button" id="research-info-modal-button" style="align: center;">Next</button>
+          </p>
+        </div>
+      </div>
+
+      <!-- Stay Still Modal -->
+      <div id="stay-still-modal" class="modal">
+        <div class="modal-content">
+          <img src="images/facial_recognition.png" class="custom-image" alt="Emoji">
+          <p>Try to keep your head still and stay in front of the screen for the whole time.</p>
+          <p>Make sure no one will interrupt you for the next few minutes.</p>
+          <p style="text-align: center">
+            <button class="modal-button" id="stay-still-modal-button">Next</button>
+          </p>
+        </div>
+      </div>
+
+      <!-- Camera Access Modal -->
+      <div id="camera-modal" class="modal">
+        <div class="modal-content">
+          <img src="images/webcam.png" class="custom-image" alt="Webcam icon">
+          <p>Please allow your camera access for testing.</p>
+          <p style="text-align: center">
+            <button class="modal-button" id="camera-allow-btn">Allow Camera</button>
+          </p>
+        </div>
+      </div>
+
+      <!-- Face Check Modal -->
+      <div id="face-check-modal" class="modal">
+        <div class="modal-content">
+          <p>Is your face clearly visible on the screen?</p>
+          <div>
+          <video id="camera-feed"></video>
+          </div>
+          <button class="modal-button" id="startCalibration" onclick="startCalibration()">Yes</button>
+          <button class="modal-button" id="retryCamera" onclick="retryCamera()">No</button>
+        </div>
+      </div>
+     <!-- Calibration section -->
+     <div id="calibration-init-message" class="modal_1" style="margin:0;">
+         <div class="modal-content_1">
+             <img src="images/calibration.png" class="img-fluid" alt="webgazer demo instructions">
+             <p>First wait for the dialog and allow the camera for the WebGazer.</p>
+             <p>Then, for calibrating the measurement of eye positions,
+                 please click on each of the circles on the screen.
+                 Each circle must be clicked
+                 <b><span style="color: red;">5</span></b> times until it becomes
+                 <b><span style="color: red;">yellow</span></b>.
+             </p>
+             <button class="modal-button">Calibrate</button>
+         </div>
+      </div>
+
+      <!-- Calibration Container -->
+      <div id="calibration-container" style="display: none;">
+        <p style="margin: 0;"><b>Please keep your face in front the camera so that
+          your eyes are within the green frame.</b>
+        </p>
+        <p> Remember to click each circle 5 times to make it yellow.</p>
+        <div id="calibration-buttons">
+          <button id="Pt1" class="button calibration-point"></button>
+          <button id="Pt2" class="button calibration-point"></button>
+          <button id="Pt3" class="button calibration-point"></button>
+          <button id="Pt4" class="button calibration-point"></button>
+          <button id="Pt5" class="button calibration-point"></button>
+          <button id="Pt6" class="button calibration-point"></button>
+          <button id="Pt7" class="button calibration-point"></button>
+          <button id="Pt8" class="button calibration-point"></button>
+          <button id="Pt9" class="button calibration-point"></button>
+        </div>
+
+        <!-- Canvas for plotting -->
+        <canvas id="plotting_canvas" width="800" height="600" style="background-color: white;"></canvas>
+      </div>
+
+      <div id="calibration-accuracy" class="modal">
+         <div class="modal-content" style="margin: 0; width: 600px; height: 200px; position: relative;">
+          <p>Please do not move your mouse and stare at the middle dot for the next <b>5 seconds.</b>
+            This will allow us to calculate the accuracy of our predictions.</p>
+          <button class="modal-button">Continue</button>
+        </div>
+      </div>
+
+      <!-- message-container  -->
+      <div id="message-container"></div>
+     
+
+	 <!-- training_task_modal  -->
+      <div id="training-task-modal" class="modal">
+          <div class="modal-content">
+               <p style="font-size: 16px;">This is a
+                   <b style="font-size: 18px; color: red;">Training Task</b> for block one before you start
+                   <b style="font-size: 18px; color: red;">Main Task 1</b>.
+               </p>
+               <button class="modal-button" id="training-task-btn">Next</button>
+          </div>
+      </div>
+
+      <div id="eye-tracking-message-modal" class="modal">
+        <div class="modal-content">
+          <p>The map stimulus will disappear after <b>7 seconds</b> and
+            you will see a graphical answer screen where you can submit your response.
+            Please look at the <b>Road Network (main roads, road junctions)</b>
+            on the map during eye tracking. <b>Remember</b> their geometry for the survey question.</p>
+          <button class="modal-button" id="eye-tracking-message-btn">OK</button>
+        </div>
+      </div>
+
+      <div id="main-task-modal" class="modal">
+          <div class="modal-content">
+              <p>This is <b>Main Task 1</b>.</p>
+              <p>Each map stimulus will disappear after <b>7 seconds</b>
+                 and you will see a graphical answer screen where you can submit your response.</p>
+              <p>Please look at the <b>Road Network(main roads, road junctions)</b>
+                 on the map during eye tracking. <b>Remember</b> their geometry for the survey question.</p>
+              <button class="modal-button" id="main_task_modal_btn">Next</button>
+         </div>
+      </div>
+      <!-- Training survey modal -->
+      <div class="map-container" id="map_0" style="display: none;">
+        <img src="images/map_road_0.png" alt="map">
+      </div>
+
+      <div id="survey-modal-0" correctAnswer="d" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_0_survey.png" class="survey-image" alt="Survey 0">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task 1_1 -->
+      <div class="map-container" id="map_1" style="display: none;">
+        <img src="images/map_road_1.png" alt="map">
+      </div>
+
+      <!-- Task 1_1 survey modal -->
+      <div id="survey-modal-1" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_1_survey.png" class="survey-image" alt="Survey 1">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+
+      <!-- Task1_2 -->
+      <div class="map-container" id="map_2" style="display: none;">
+        <img src="images/map_road_2.png" alt="map">
+      </div>
+
+      <!-- Task 1_2 survey modal -->
+      <div id="survey-modal-2" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_2_survey.png" class="survey-image" alt="Survey 2">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- 1_3 -->
+      <div class="map-container" id="map_3" style="display: none;">
+        <img src="images/map_road_3.png" alt="map">
+      </div>
+
+      <!-- Task 1_3 survey modal -->
+      <div id="survey-modal-3" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_3_survey.png" class="survey-image" alt="Survey 3">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task 1_4 -->
+      <div class="map-container" id="map_4" style="display: none;">
+        <img src="images/map_road_4.png" alt="map">
+      </div>
+
+      <!-- Task 1_4 survey modal -->
+      <div id="survey-modal-4" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_4_survey.png" class="survey-image" alt="Survey 4">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task 1_5 -->
+      <div class="map-container" id="map_5" style="display: none;">
+        <img src="images/map_road_5.png" alt="map">
+      </div>
+
+      <!-- Task 1_5 survey modal -->
+      <div id="survey-modal-5" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_5_survey.png" class="survey-image" alt="Survey 5">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task 1_6 -->
+      <div class="map-container" id="map_6" style="display: none;">
+        <img src="images/map_road_6.png" alt="map">
+      </div>
+
+      <!-- Task 1_6 survey modal -->
+      <div id="survey-modal-6" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_6_survey.png" class="survey-image" alt="Survey 6">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+        <!-- Task 1_7 -->
+      <div class="map-container" id="map_7" style="display: none;">
+        <img src="images/map_road_7.png" alt="map">
+      </div>
+      <!-- Task 1_7 survey modal -->
+      <div id="survey-modal-7" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_7_survey.png" class="survey-image" alt="Survey 7">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+        <!-- Task1_8 -->
+      <div class="map-container" id="map_8" style="display: none;">
+        <img src="images/map_road_8.png" alt="map">
+      </div>
+      <!-- Task 1_8 survey modal -->
+      <div id="survey-modal-8" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_8_survey.png" class="survey-image" alt="Survey 8">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+        <!-- Task 1_9 -->
+      <div class="map-container" id="map_9" style="display: none;">
+        <img src="images/map_road_9.png" alt="map">
+      </div>
+      <!-- Task 1_9 survey modal -->
+      <div id="survey-modal-9" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_9_survey.png" class="survey-image" alt="Survey 9">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+        <!-- Task 1_10 -->
+      <div class="map-container" id="map_10" style="display: none;">
+        <img src="images/map_road_10.png" alt="map">
+      </div>
+      <!-- Task 1_10 survey modal -->
+      <div id="survey-modal-10" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network (main roads, road junctions)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_10_survey.png" class="survey-image" alt="Survey 10">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+	  
+      <!-- training_task_modal_2  -->
+	  
+      <div id="training-task-modal_2" class="modal">
+          <div class="modal-content">
+              <p style="font-size: 16px;">This is a
+                  <b style="font-size: 18px; color: red;">Training Task</b> for block two before you start
+                  <b style="font-size: 18px; color: red;">Main Task 2</b>.
+              </p>
+              <button class="modal-button" id="training-task-btn_2">Next</button>
+           </div>
+      </div>
+	          
+      <!-- Eye Tracking Message Modal 2 -->
+      <div id="eye-tracking-message-modal_2" class="modal">
+        <div class="modal-content">
+          <p>The map stimulus will disappear after <b>7 seconds</b> and
+            you will see a graphical answer screen where you can submit your response.
+            Please look at the <b>Hydrography(major lakes and rivers) </b>
+            on the map during eye tracking. <b>Remember</b> their geometry for the survey question.</p>
+          <button class="modal-button" id="eye-tracking-message-btn_2">OK</button>
+        </div>
+      </div>
+
+      <div id="main-task-modal_2" class="modal">
+          <div class="modal-content">
+              <p>This is <b>Main Task 2</b>.</p>
+              <p>Each map stimulus will disappear after <b>7 seconds</b>
+                 and you will see a graphical answer screen where you can submit your response.</p>
+              <p>Please look at the <b>Hydrography(major lakes and rivers)</b>
+                 on the map during eye tracking. <b>Remember</b> their geometry for the survey question.</p>
+              <button class="modal-button" id="main_task_modal_btn_2">Next</button>
+         </div>
+     </div>
+       <!-- Training modal 2 -->
+     <div class="map-container" id="map2_0" style="display: none;">
+        <img src="images/map_hydro_0.png" alt="map">
+      </div>
+
+      <div id="survey-modal2-0" correctAnswer="b" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_0_survey.png" class="survey-image" alt="Survey 0">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task 2_1 -->
+      <div class="map-container" id="map2_1" style="display: none;">
+        <img src="images/map_hydro_1.png" alt="map">
+      </div>
+
+      <!-- Task 2_1 survey modal -->
+      <div id="survey-modal2-1" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_1_survey.png" class="survey-image" alt="Survey 1">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task 2_2 -->
+      <div class="map-container" id="map2_2" style="display: none;">
+        <img src="images/map_hydro_2.png" alt="map">
+      </div>
+
+      <!-- Task 2_2 survey modal -->
+      <div id="survey-modal2-2" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_2_survey.png" class="survey-image" alt="Survey 2">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task2_3 -->
+      <div class="map-container" id="map2_3" style="display: none;">
+        <img src="images/map_hydro_3.png" alt="map">
+      </div>
+
+      <!-- Task 2_3 survey modal -->
+      <div id="survey-modal2-3" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers)depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_3_survey.png" class="survey-image" alt="Survey 3">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task 2_4 -->
+      <div class="map-container" id="map2_4" style="display: none;">
+        <img src="images/map_hydro_4.png" alt="map">
+      </div>
+
+      <!-- Task 2_4 survey modal -->
+      <div id="survey-modal2-4" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography (major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_4_survey.png" class="survey-image" alt="Survey 4">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task 2_5 -->
+      <div class="map-container" id="map2_5" style="display: none;">
+        <img src="images/map_hydro_5.png" alt="map">
+      </div>
+
+      <!-- Task 2_5 survey modal -->
+      <div id="survey-modal2-5" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_5_survey.png" class="survey-image" alt="Survey 5">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task 2_6 -->
+      <div class="map-container" id="map2_6" style="display: none;">
+        <img src="images/map_hydro_6.png" alt="map">
+      </div>
+
+      <!-- Task 2_6 survey modal -->
+      <div id="survey-modal2-6" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_6_survey.png" class="survey-image" alt="Survey 6">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+        <!-- Task 2_7 -->
+      <div class="map-container" id="map2_7" style="display: none;">
+        <img src="images/map_hydro_7.png" alt="map">
+      </div>
+      <!-- Task 2_7 survey modal -->
+      <div id="survey-modal2-7" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_7_survey.png" class="survey-image" alt="Survey 7">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+        <!-- Task 2_8 -->
+      <div class="map-container" id="map2_8" style="display: none;">
+        <img src="images/map_hydro_8.png" alt="map">
+      </div>
+      <!-- Task 2_8 survey modal -->
+      <div id="survey-modal2-8" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_8_survey.png" class="survey-image" alt="Survey 8">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+        <!-- Task 2_9 -->
+      <div class="map-container" id="map2_9" style="display: none;">
+        <img src="images/map_hydro_9.png" alt="map">
+      </div>
+      <!-- Task 2_9 survey modal -->
+      <div id="survey-modal2-9" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_9_survey.png" class="survey-image" alt="Survey 9">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+        <!-- Task 2_10 -->
+      <div class="map-container" id="map2_10" style="display: none;">
+        <img src="images/map_hydro_10.png" alt="map">
+      </div>
+      <!-- Task 2_10 survey modal -->
+      <div id="survey-modal2-10" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the hydrography(major lakes and rivers)
+               depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/hydro_10_survey.png" class="survey-image" alt="Survey 10">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+	  
+     <!-- training_task_modal_3  -->
+
+      <div id="training-task-modal_3" class="modal">
+          <div class="modal-content">
+              <p style="font-size: 16px;">This is a
+                  <b style="font-size: 18px; color: red;">Training Task</b>
+                  for block three before you start
+                  <b style="font-size: 18px; color: red;">Main Task 3</b>.
+              </p>
+              <button class="modal-button" id="training-task-btn_3">Next</button>
+          </div>
+      </div>	  
+	   
+      <div id="eye-tracking-message-modal_3" class="modal">
+        <div class="modal-content">
+          <p>The map stimulus will disappear after <b>7 seconds</b> and
+            you will see a graphical answer screen where you can submit your response.
+            Please look at the <b>Road Network (main roads, road junctions) and Hydrography (major lakes and rivers)</b>
+            on the map during eye tracking. <b>Remember</b> their geometry for the survey question.</p>
+          <button class="modal-button" id="eye-tracking-message-btn_3">OK</button>
+        </div>
+      </div>
+
+      <div id="main-task-modal_3" class="modal">
+          <div class="modal-content">
+              <p>This is <b>Main Task 3</b>.</p>
+              <p>Each map stimulus will disappear after <b>7 seconds</b>
+                 and you will see a graphical answer screen where you can submit your response.</p>
+              <p>Please look at the <b>Road Network(main roads, road junctions) and Hydrography (major lakes and rivers) </b>
+                 on the map during eye tracking. <b>Remember</b> their geometry for the survey question.</p>
+              <button class="modal-button" id="main_task_modal_btn_3">Next</button>
+         </div>
+      </div>
+
+      <!-- Training modal 3 -->
+      <div class="map-container" id="map3_0" style="display: none;">
+        <img src="images/map_road_and_hydro_0.png" alt="map">
+      </div>
+
+      <div id="survey-modal3-0" correctAnswer="a" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads,road junctions)
+              and hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_0_survey.png" class="survey-image" alt="Survey 0">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task 3_1 -->
+      <div class="map-container" id="map3_1" style="display: none;">
+        <img src="images/map_road_and_hydro_1.png" alt="map">
+      </div>
+
+      <!-- Task 3_1 survey modal -->
+      <div id="survey-modal3-1" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to road network(main roads,road junctions)
+              and hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_1_survey.png" class="survey-image" alt="Survey 1">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task 3_2 -->
+      <div class="map-container" id="map3_2" style="display: none;">
+        <img src="images/map_road_and_hydro_2.png" alt="map">
+      </div>
+
+      <!-- Task3_2 survey modal -->
+      <div id="survey-modal3-2" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads,road junctions)
+              and hydrography(major lakes and rivers)depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_2_survey.png" class="survey-image" alt="Survey 2">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task3_3 -->
+      <div class="map-container" id="map3_3" style="display: none;">
+        <img src="images/map_road_and_hydro_3.png" alt="map">
+      </div>
+
+      <!-- Task 3_3 survey modal -->
+      <div id="survey-modal3-3" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads,road junctions)
+              and hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_3_survey.png" class="survey-image" alt="Survey 3">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <!-- Task3_4 -->
+      <div class="map-container" id="map3_4" style="display: none;">
+        <img src="images/map_road_and_hydro_4.png" alt="map">
+      </div>
+
+      <!-- Task3_4 survey modal -->
+      <div id="survey-modal3-4" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to road network(main roads,road junctions)
+              and hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_4_survey.png" class="survey-image" alt="Survey 4">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task3_5 -->
+      <div class="map-container" id="map3_5" style="display: none;">
+        <img src="images/map_road_and_hydro_5.png" alt="map">
+      </div>
+
+      <!-- Task 3_5 survey modal -->
+      <div id="survey-modal3-5" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads,road junctions)
+              and hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_5_survey.png" class="survey-image" alt="Survey 5">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task 3_6 -->
+      <div class="map-container" id="map3_6" style="display: none;">
+        <img src="images/map_road_and_hydro_6.png" alt="map">
+      </div>
+
+      <!-- Task 3_6 survey modal -->
+      <div id="survey-modal3-6" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads,road junctions)
+              and hydrography(major lakes and rivers)depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_6_survey.png" class="survey-image" alt="Survey 6">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task3_7 -->
+      <div class="map-container" id="map3_7" style="display: none;">
+        <img src="images/map_road_and_hydro_7.png" alt="map">
+      </div>
+
+      <!-- Task 3_7 survey modal -->
+      <div id="survey-modal3-7" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads,road junctions)
+              and hydrography(major lakes and rivers)depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_7_survey.png" class="survey-image" alt="Survey 7">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task3_8 -->
+      <div class="map-container" id="map3_8" style="display: none;">
+        <img src="images/map_road_and_hydro_8.png" alt="map">
+      </div>
+
+      <!-- Task 3_8 survey modal -->
+      <div id="survey-modal3-8" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads,road junctions)
+              and hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_8_survey.png" class="survey-image" alt="Survey 8">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task 3_9 -->
+      <div class="map-container" id="map3_9" style="display: none;">
+        <img src="images/map_road_and_hydro_9.png" alt="map">
+      </div>
+
+      <!-- Task 3_9 survey modal -->
+      <div id="survey-modal3-9" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads,road junctions)
+              and hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_9_survey.png" class="survey-image" alt="Survey 9">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+
+      <!-- Task 3_10 -->
+      <div class="map-container" id="map3_10" style="display: none;">
+        <img src="images/map_road_and_hydro_10.png" alt="map">
+      </div>
+
+      <!-- Task 3_10 survey modal -->
+      <div id="survey-modal3-10" class="modal">
+        <div class="modal-content">
+          <div class="custom-top-bar">
+            <p>Which of the following sketches is similar to the road network(main roads,road junctions)
+              and hydrography(major lakes and rivers) depicted on the map?</p>
+          </div>
+          <p>
+            <img src="images/road_and_hydro_10_survey.png" class="survey-image" alt="Survey 10">
+          </p>
+          <button class="modal-button" id="a">a</button>
+          <button class="modal-button" id="b">b</button>
+          <button class="modal-button" id="c">c</button>
+          <button class="modal-button" id="d">d</button>
+        </div>
+      </div>
+      <div id="final-message" class="modal">
+          <div class="modal-content">
+              <p>Thank you very much for completing the survey!</p>
+              <p>Please <a href="https://forms.gle/NWvTHmhsn7XaRtpf7" target="_blank">click here</a> to continue with the short survey about the experiment.</p>
+              <button class="modal-button" type="button" onclick="startShortSurvey()">OK</button>
+          </div>
+      </div>
+
+      <!-- End of main body -->
+
+      <!-- WebGazer.js library -->
+      <script src="https://webgazer.cs.brown.edu/webgazer.js" type="text/javascript"></script>
+      <!-- Main javascript -->
+      <script src="js/main.js"></script>
+
+  </body>
+</html>
+             
