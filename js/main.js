@@ -18,6 +18,7 @@ const maxCalibrationAttempts = 3;  // maximum calibration attempts
 // modals
 
 let introductionText = document.getElementById("introduction-text");
+
 let consentCheckbox = document.getElementById("consentCheckbox");
 
 let notice_element = document.getElementById("notice");
@@ -34,18 +35,18 @@ let camera_modal_btn = camera_modal.querySelector('button');
 let face_check_modal = document.getElementById("face-check-modal");
 
 // record the width and height of the screen in pixels
-const screenWidth_px = window.screen.width;
-const screenHeight_px = window.screen.height;
+const screenWidth_px = window.innerWidth
+const screenHeight_px = window.innerHeight
+
 console.log("Screen width: " + screenWidth_px + " pixels");
 console.log("Screen height: " + screenHeight_px + " pixels");
 
-
 consentCheckbox.onclick = () => {
     if (consentCheckbox.checked) {
-        // Delay the transition to let the check mark appear
+        // delay the transition to let the check mark appear
         setTimeout(() => {
             hide_element(introductionText);
-			show_element(notice_element);// Show notice text
+            show_element(notice_element);// Show notice text
             show_element(info_modal);
         }, 400); // 400 milliseconds delay
     }
@@ -57,12 +58,10 @@ info_modal_btn.onclick = () => {
     show_element(stay_still_modal);
 };
 
-
 stay_still_modal_btn.onclick = () => {
     hide_element(stay_still_modal);
     show_element(camera_modal);
 };
-
 
 camera_modal_btn.onclick = () => {
     testCameraAccess();
@@ -75,8 +74,6 @@ camera_modal_btn.onclick = () => {
 
 console.log(`>>> user ID = ${userId}`);
 
-
-hide_element(notice_element); // Hide notice on page load
 show_element(introductionText); // Show introduction text
 
 //==================================================
@@ -502,7 +499,9 @@ function calibrationAccuracyModal(accuracy) {
 
         if (failedCalibrationAttempts >= maxCalibrationAttempts) {
             // If failed three times, show the final message
-            paragraph.textContent = 'Calibration was unsuccessful, and we cannot proceed with the experiment. Thank you for your time! Please close this window.';
+            paragraph.textContent = 'Calibration was unsuccessful, and we cannot proceed with the experiment. ' +
+                'If you are still interested in taking the study, please reload the link to the survey again. ' +
+                'Thank you for your time! Please close this window.';
             button.textContent = 'End Experiment';
         } else {
             paragraph.textContent = 'Please repeat the calibration.';
@@ -1276,7 +1275,7 @@ function submitResultsToCloud(results) {
 
     // saveJSONFile(textData); // DEBUG
 
-    const google_script_url = "https://script.google.com/macros/s/AKfycbwSrj7VdOMdmuexJXcvebx8QKIqTfKIAtDmo_R0m1fEKSaNzXAWo3y4ru4I248D0esw/exec";
+    const google_script_url = "https://script.google.com/macros/s/AKfycbz-6qR8ORSn9Og4NX0yhzKV-ROC-Kls7keuPRtvIBl35754cQaMYjlxZSByMnzR938Z/exec";
 
     fetch(google_script_url, {
         method: 'POST',
