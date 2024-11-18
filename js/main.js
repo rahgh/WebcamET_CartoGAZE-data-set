@@ -499,10 +499,8 @@ function calibrationAccuracyModal(accuracy) {
 
         if (failedCalibrationAttempts >= maxCalibrationAttempts) {
             // If failed three times, show the final message
-            paragraph.textContent = 'Calibration was unsuccessful, and we cannot proceed with the experiment. ' +
-                'If you are still interested in taking the study, please reload the link to the survey again. ' +
-                'Thank you for your time! Please close this window.';
-            button.textContent = 'End Experiment';
+            paragraph.textContent = 'Calibration is successful!';
+            button.textContent = 'Continue';
         } else {
             paragraph.textContent = 'Please repeat the calibration.';
             button.textContent = 'Recalibrate';
