@@ -11,54 +11,21 @@ html {
 /* ============================= Introduction Section ============================= */
 
 /* introduction section */
- #introduction-text {
-    display: block; /* Initially visible */
+#introduction-text {
+    display: block;
     background-color: #ffffff;
-    padding: 5px;
-    margin: 2px auto;
-    width: 100%; /* Adjust width as needed */
-    max-width:1500px;
-    height:700px; /* Fixed height for scrollable area */
-    overflow-y: auto; /* Enable vertical scrolling */
-    border-radius: 8px;
-    border: 1px solid #ccc; /* Optional: for visibility */
+    width: 100%;
+    max-width: 100%;
+    height: 100vh; /* 100% of the viewport height */
+    overflow: auto; /* Enables scrolling when zoomed out */
+    padding: 1%; /* Optional: Padding for inner spacing */
+	line-height: 1; /* Controls vertical spacing between lines */
+	overflow-y: auto; /* Enables scrolling when zoomed out */
+	box-sizing: border-box; /* Ensures padding is included in the width/height */
+    
 }
 
-/* Styling for different text elements within the introduction */
-#introduction-text h1 {
-    font-size: 28px; /* Size of the heading */
-    margin-bottom:1px; /* Space below the heading */
-	color: #006400; /* Green color */
-}
-#introduction-text h2 {
-    font-size: 18px; /* Size of the heading */
-    margin-bottom: 1px; /* Space below the heading */
-	color: #006400 ; /* Green color */
-}
-#introduction-text p {
-    font-size: 16px; /* Size of paragraph text */
-    margin-bottom: 1px; /* Space below paragraphs */
-    font-weight: normal; /* Normal font weight */
-}
 
-#introduction-text label {
-    font-size: 16px; /* Size of the label text next to the checkbox */
-    display: inline-block; /* Align label with checkbox */
-    margin-top: 4 px; /* Space above the label */
-}
-
-#introduction-text ul {
-    list-style-type: disc; /* Use standard bullets */
-    padding-left: 20px; /* Indent the list */
-    margin-bottom: 2px; /* Space below the list */
-}
-
-#introduction-text li {
-    font-size: 14px; /* Size of list item text */
-    margin-bottom: 2px; /* Space between list items */
-    font-weight: normal; /* Normal font weight */
-    text-align: left; /* Align text to the left */
-}
 
 /* Custom style for checkbox */
 input[type="checkbox"] {
@@ -104,17 +71,17 @@ input[type="checkbox"]:checked::after {
 #notice {
     position: relative;
     background-color: #ffffff;
-    padding:1 px;
+    padding:1%;
     margin: 4px auto;
     width: 100%;
-    max-width: 1050px;
-    border-radius: 8px;
+    max-width: 100%;
+    border-radius:  1%;
     text-align: center;
 }
 
 #notice p {
     font-size: 16px;
-    margin-bottom: 3px;
+    margin-bottom:  1%;
     font-weight: bold;
 }
 
@@ -138,7 +105,7 @@ input[type="checkbox"]:checked::after {
 
 .modal-content {
     background-color: rgb(240,240,240);
-    padding: 10px;
+    padding: 1%;
     border: 2px solid #888;
     margin:auto;
     width: 800px;
