@@ -21,6 +21,7 @@ html {
     padding: 1%; /* Optional: Padding for inner spacing */
 	line-height: 1; /* Controls vertical spacing between lines */
 	overflow-y: auto; /* Enables scrolling when zoomed out */
+	font-size: 15px; /* Sets the font size */
 	box-sizing: border-box; /* Ensures padding is included in the width/height */
     
 }
