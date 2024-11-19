@@ -18,7 +18,7 @@ html {
     max-width: 100%;
     height: 100vh; /* 100% of the viewport height */
     overflow: auto; /* Enables scrolling when zoomed out */
-    padding: 1%; /* Optional: Padding for inner spacing */
+    padding: 0%; /* Optional: Padding for inner spacing */
     line-height: 1; /* Controls vertical spacing between lines */
     overflow-y: auto; /* Enables scrolling when zoomed out */
     font-size: 16px; /* Sets the font size */
