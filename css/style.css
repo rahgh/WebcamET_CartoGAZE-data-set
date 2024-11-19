@@ -30,8 +30,8 @@ html {
 
 /* Custom style for checkbox */
 input[type="checkbox"] {
-    width: 30px; /* Custom width for checkbox */
-    height: 30px; /* Custom height for checkbox */
+    width: 25px; /* Custom width for checkbox */
+    height: 25px; /* Custom height for checkbox */
     margin-right: 5px; /* Space between checkbox and label */
     appearance: none; /* Remove default checkbox style */
     border: 2px solid #ccc; /* Gray border */
