@@ -14,18 +14,18 @@ html {
 #introduction-text {
     display: block;
     background-color: #ffffff;
-    width: 100%;
+    width: 95%;
     max-width: 100%;
     height: 100vh; /* 100% of the viewport height */
     overflow: auto; /* Enables scrolling when zoomed out */
     padding: 0%; /* Optional: Padding for inner spacing */
+    margin:1%;
     line-height: 1; /* Controls vertical spacing between lines */
     overflow-y: auto; /* Enables scrolling when zoomed out */
     font-size: 16px; /* Sets the font size */
     box-sizing: border-box; /* Ensures padding is included in the width/height */
     
 }
-
 
 
 /* Custom style for checkbox */
