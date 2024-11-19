@@ -9,6 +9,9 @@ let CalibrationPoints = {};
 let lastEyeCheckTime_ms = Date.now();
 let clickCounter = 0;
 let isEyePositionCorrect = false
+let currentStream = null; // Store the current stream globally
+let stream_width = null;
+let stream_height = null;
 const eyeCheckDelay_ms = 250; // check every 300 ms
 const sufficientMeasurementAccuracy = 50;  // sufficient percentage of accuracy
 const userId = generateUniqueUserId();  // unique user ID
@@ -101,8 +104,20 @@ function testCameraAccess() {
     console.log("Requesting camera access...");
     navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
-            const videoElement = document.getElementById('camera-feed');
+			const videoElement = document.getElementById('camera-feed');
             videoElement.srcObject = stream;
+
+            videoElement.onloadedmetadata = () => {
+                const track = stream.getVideoTracks()[0];
+                const settings = track.getSettings();
+
+                // Store the dimensions globally
+                stream_width = settings.width || 'Unknown';
+                stream_height = settings.height || 'Unknown';
+
+                console.log('Width: ' + stream_width + 'px');
+                console.log('Height: ' + stream_height + 'px');
+            };
             videoElement.play();
             document.getElementById('camera-allow-btn').disabled = true;
         })
@@ -363,7 +378,9 @@ function collectResults(eyeTrackingData, fixationData, surveyAnswer)
         'fixation_data': fixation_data,
         'survey_answer': surveyAnswer,
         'screen_width_px': screenWidth_px,
-        'screen_height_px': screenHeight_px
+		'screen_height_px': screenHeight_px,
+		'stream_width': stream_width, 
+        'stream_height': stream_height
     };
 
     return results;
