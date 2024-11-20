@@ -104,20 +104,8 @@ function testCameraAccess() {
     console.log("Requesting camera access...");
     navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
-			const videoElement = document.getElementById('camera-feed');
+            const videoElement = document.getElementById('camera-feed');
             videoElement.srcObject = stream;
-
-            videoElement.onloadedmetadata = () => {
-                const track = stream.getVideoTracks()[0];
-                const settings = track.getSettings();
-
-                // Store the dimensions globally
-                stream_width = settings.width || 'Unknown';
-                stream_height = settings.height || 'Unknown';
-
-                console.log('Width: ' + stream_width + 'px');
-                console.log('Height: ' + stream_height + 'px');
-            };
             videoElement.play();
             document.getElementById('camera-allow-btn').disabled = true;
         })
@@ -378,9 +366,8 @@ function collectResults(eyeTrackingData, fixationData, surveyAnswer)
         'fixation_data': fixation_data,
         'survey_answer': surveyAnswer,
         'screen_width_px': screenWidth_px,
-		'screen_height_px': screenHeight_px,
-		'stream_width': stream_width, 
-        'stream_height': stream_height
+	'screen_height_px': screenHeight_px,
+		
     };
 
     return results;
