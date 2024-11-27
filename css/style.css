@@ -24,9 +24,8 @@ html {
     overflow-y: auto; /* Enables scrolling when zoomed out */
     font-size: 16px; /* Sets the font size */
     box-sizing: border-box; /* Ensures padding is included in the width/height */
-    
-}
 
+}
 
 /* Custom style for checkbox */
 input[type="checkbox"] {
@@ -38,7 +37,7 @@ input[type="checkbox"] {
     border-radius: 4px; /* Rounded corners */
     position: relative;
     cursor: pointer;
-	vertical-align: middle; /* Align checkbox with text */
+    vertical-align: middle; /* Align checkbox with text */
 }
 
 /* Style for checked state */
@@ -64,8 +63,8 @@ input[type="checkbox"]:checked::after {
     width: 95px; /* Adjust width to resize the logo */
     height: auto; /* Keeps the aspect ratio of the logo */
     z-index: 1000; /* Ensure it appears above other content */
-}  
-   
+}
+
 /* ============================= Notice Section ============================= */
 
 /* notice section */
@@ -209,7 +208,7 @@ input[type="checkbox"]:checked::after {
     #Pt1, #Pt2, #Pt3, #Pt4, #Pt5, #Pt6, #Pt7, #Pt8, #Pt9 {
         position: absolute;
     }
-	
+
     /* regular set of points */
     #Pt1 { top: 35%; left: 20%; }
     #Pt2 { top: 35%; left: 50%; }
@@ -222,7 +221,7 @@ input[type="checkbox"]:checked::after {
     #Pt7 { top: 85%; left: 20%; }
     #Pt8 { top: 85%; left: 50%; }
     #Pt9 { top: 85%; left: 80%; }
-	
+
 
 /* ============================= Maps and Survey Section ======================== */
 
