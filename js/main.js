@@ -366,8 +366,8 @@ function collectResults(eyeTrackingData, fixationData, surveyAnswer)
         'fixation_data': fixation_data,
         'survey_answer': surveyAnswer,
         'screen_width_px': screenWidth_px,
-	'screen_height_px': screenHeight_px,
-		
+        'screen_height_px': screenHeight_px,
+
     };
 
     return results;
@@ -783,6 +783,7 @@ function showMainModal(main_task_modal_id, next_task) {
     // get the main task modal element
     const main_task_modal = document.getElementById(main_task_modal_id);
     if (main_task_modal) {
+        // show the Main task modal
         show_element(main_task_modal);
     } else {
         console.error(`Main task modal ${main_task_modal_id} not found!`);
@@ -801,16 +802,12 @@ function showMainModal(main_task_modal_id, next_task) {
         WebGazerListener(data, elapsedTime, true);
     });
 
-    // show the Main task modal
-    show_element(main_task_modal);
-
     // get the button inside the main task modal
     const main_task_modal_btn = main_task_modal.querySelector(".modal-button");
 
     if (main_task_modal_btn) {
         main_task_modal_btn.onclick = function() {
             hide_element(main_task_modal);
-            show_element(document.getElementById('map_1'));
 
             // run next task
             next_task();
@@ -827,14 +824,6 @@ function showTask(figure_id, survey_modal_id, delay_ms, next_task, send_data) {
 
     const survey_modal = document.getElementById(survey_modal_id);
     console.log(`Trying to display element with ID: ${figure_id}`);
-
-    // connect buttons of the survey modal to `submitAnswer` function
-    const modalButtons = survey_modal.querySelectorAll('.modal-button');
-    modalButtons.forEach(button => {
-        // avoid adding multiple event listeners by first removing any existing one
-        button.removeEventListener('click', handleButtonClick);
-        button.addEventListener('click', handleButtonClick);
-    });
 
     function handleButtonClick(event) {
         const button = event.target;
@@ -870,6 +859,14 @@ function showTask(figure_id, survey_modal_id, delay_ms, next_task, send_data) {
         next_task();
     }
 
+    // connect buttons of the survey modal to `submitAnswer` function
+    const modalButtons = survey_modal.querySelectorAll('.modal-button');
+    modalButtons.forEach(button => {
+        // avoid adding multiple event listeners by first removing any existing one
+        button.removeEventListener('click', handleButtonClick);
+        button.addEventListener('click', handleButtonClick);
+    });
+
     // show the map and initialize eye tracking
     show_element(document.getElementById(figure_id));
     console.log(`Display figure ${figure_id}`);
@@ -900,7 +897,7 @@ function showTask(figure_id, survey_modal_id, delay_ms, next_task, send_data) {
 // Training Task 0
 function task1_0() {
     // training task
-    console.log("Begin Task 1");
+    console.log("Begin Task 1_0");
     const figure_id = "map_0";
     const delay_ms = 7000;
     const survey_modal_id = "survey-modal-0";
@@ -1025,8 +1022,7 @@ function task2_0() {
     const figure_id =  "map2_0";
     const delay_ms = 7000;
     const survey_modal_id = "survey-modal2-0";
-    const next_task = task2_1;
-
+    const next_task = function () {showMainModal("main-task-modal_2", task2_1)};
     showTask(figure_id, survey_modal_id, delay_ms, next_task, false);
 }
 
@@ -1146,7 +1142,7 @@ function task3_0()
     const figure_id =  "map3_0";
     const delay_ms = 7000;
     const survey_modal_id = "survey-modal3-0";
-    const next_task = task3_1;
+    const next_task = function () {showMainModal("main-task-modal_3", task3_1)};
 
     showTask(figure_id, survey_modal_id, delay_ms, next_task, false);
 }
