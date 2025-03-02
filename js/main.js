@@ -1,8 +1,9 @@
+// see WebGazer Top Level API <https://github.com/brownhci/WebGazer/wiki/Top-Level-API>
 let eyeTrackingData = []; // array to store eye tracking data
 let fixationData = []; // array to store fixation data
 let resultsCollected = {}; // collection of results from tasks
 let previousGaze = null;
-let surveyAnswer = {}; // variable to store the survey answers
+let calibrationResults = {}; // variable to calibration eye-tracking data
 let calibrationAccuracy = 0; // variable to store calibration accuracy
 let PointCalibrate = 0;
 let CalibrationPoints = {};
@@ -280,11 +281,6 @@ function initWebGazer() {
     // set WebGazer listener to acquire the data
     webgazer.setGazeListener(function (data, elapsedTime)
                              { WebGazerListener(data, elapsedTime, false); });
-
-    // start WebGazer
-    webgazer.begin();
-    // start calibration process
-    showCalibrationInitMessage();
 }
 
 // check eyes in the validation box using WebGazer's built-in logic
@@ -340,7 +336,7 @@ function checkEyesInValidationBox(videoElement, eyeFeatures) {
         return 0; // return black border if no valid eyeFeatures or videoElement
 }
 
-function collectResults(eyeTrackingData, fixationData, surveyAnswer)
+function collectResults(eyeTrackingData, fixationData)
 {
     // function to collect all results
     let eye_tracking_data = [];
@@ -364,7 +360,6 @@ function collectResults(eyeTrackingData, fixationData, surveyAnswer)
         'calibration_accuracy': calibrationAccuracy,
         'eye_tracking_data': eye_tracking_data,
         'fixation_data': fixation_data,
-        'survey_answer': surveyAnswer,
         'screen_width_px': screenWidth_px,
         'screen_height_px': screenHeight_px,
 
@@ -401,8 +396,11 @@ function startCalibration() {
     hide_element(document.getElementById('notice'));
     hide_element(face_check_modal);
     console.log('initialize WebGazer...');
-    initWebGazer(); // initialize WebGazer
+    initWebGazer();  // initialize WebGazer
+    // start calibration process
+    showCalibrationInitMessage();
 }
+
 
 /*
  * load this function when the calibration starts.
@@ -412,7 +410,12 @@ function startCalibration() {
 */
 function loadCalibrationCanvas() {
     console.log("Loading calibration canvas...");
+
     showCalibrationCanvas();
+
+    // clear data from WebGazer
+    resetWebGazerData();
+    webgazer.begin();  // start WebGazer
 
     // click event on the calibration buttons
     document.querySelectorAll('.calibration-point').forEach((button) => {
@@ -449,6 +452,30 @@ function calPointClick(calib_node) {
     }
 
     if (PointCalibrate >= 9) { // last point is calibrated
+
+        webgazer.pause()
+
+        // store calibration data
+        calibrationResults['calibration_grid'] = collectResults(eyeTrackingData, fixationData);
+
+        // store positions of grid points
+        gridPoints = {};
+        document.querySelectorAll('.calibration-point').forEach((gridPt) => {
+            const Pt_id = gridPt.id;
+            const rect = gridPt.getBoundingClientRect();
+            const x = rect.left + window.scrollX;
+            const y = rect.top + window.scrollY;
+            gridPoints[Pt_id] =
+                {'x': 100 * x / window.innerWidth,
+                 'y': 100 * y / window.innerHeight};
+
+            console.log(`Pt[${Pt_id}] at (x = ${x}, y = ${y})`);
+        });
+
+        calibrationResults['calibration_gridpoints'] = gridPoints;
+
+        resetWebGazerData();
+
         // hide all elements in calibration class except the middle point
         document.querySelectorAll('.calibration-point').forEach((button) => {
             button.style.setProperty('display', 'none');
@@ -471,6 +498,7 @@ function calPointClick(calib_node) {
                 // calculate accuracy
                 hide_element(calibration_accuracy_elm);
                 webgazer.showPredictionPoints(true);
+                webgazer.resume();
                 calcAccuracy();
             };
 
@@ -538,9 +566,10 @@ function calcAccuracy() {
         clearCanvas();
         webgazer.showPredictionPoints(false); // hide WebGazer points
 
-        var past50 = webgazer.getStoredPoints(); // retrieve the stored points
+        var past50 = webgazer.getStoredPoints(); // returns the fifty most recent tracker predictions
         var precision_measurement = calculatePrecision(past50);
-        calibrationAccuracy = precision_measurement;  // <-- Store the accuracy here
+        calibrationAccuracy = precision_measurement;
+
         let [accuracy_precision_modal, isAccuracySufficient] =
             calibrationAccuracyModal(precision_measurement);
 
@@ -552,7 +581,11 @@ function calcAccuracy() {
         if (!isAccuracySufficient) {
             accuracy_precision_modal.querySelector('button').onclick = () => {
                 hide_element(accuracy_precision_modal);
-                 if (failedCalibrationAttempts >= maxCalibrationAttempts) {
+
+                // discard WebGazer data
+                resetWebGazerData();
+
+                if (failedCalibrationAttempts >= maxCalibrationAttempts) {
                      console.log('Calibration failed after 3 attempts.');
                     // Add logic to end the experiment or disable further actions
                 } else {
@@ -647,7 +680,8 @@ function calculatePrecision(past50Array) {
     var staringPointY = windowHeight / 2;
 
     var precisionPercentages = new Array(50);
-    calculatePrecisionPercentages(precisionPercentages, windowHeight,
+    calculatePrecisionPercentages(precisionPercentages,
+                                  windowWidth, windowHeight,
                                   x50, y50, staringPointX, staringPointY);
 
     // calculate average
@@ -667,27 +701,25 @@ function calculatePrecision(past50Array) {
  * the prediction point from the centre point (uses the window height as
  * lower threshold 0%)
  */
-function calculatePrecisionPercentages(precisionPercentages, windowHeight,
+function calculatePrecisionPercentages(precisionPercentages,
+                                       windowWidth, windowHeight,
                                        x50, y50, staringPointX, staringPointY) {
     for (x = 0; x < 50; x++) {
         // calculate distance between each prediction and staring point
-        var xDiff = staringPointX - x50[x];
-        var yDiff = staringPointY - y50[x];
-        var distance = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
+        var xDiff = (staringPointX - x50[x]) / windowWidth;
+        var yDiff = (staringPointY - y50[x]) / windowHeight;
+        var rel_distance = Math.sqrt(2 * ((xDiff * xDiff) + (yDiff * yDiff)));
 
         // calculate precision percentage
-        var halfWindowHeight = windowHeight / 2;
         var precision = 0;
-        if (distance <= halfWindowHeight && distance > -1) {
-            precision = 100 - (distance / halfWindowHeight * 100);
-        } else if (distance > halfWindowHeight) {
+        if (rel_distance < 1) {
+            precision = 1 - rel_distance;
+        } else {
             precision = 0;
-        } else if (distance > -1) {
-            precision = 100;
         }
 
         // store the precision
-        precisionPercentages[x] = precision;
+        precisionPercentages[x] = 100 * precision;
     }
 }
 
@@ -695,7 +727,12 @@ function endCalibration() {
     console.log('Stopping Calibration...');
     webgazer.pause(); // pause WebGazer
 
-    // hide calibration Points and Clear Canvas
+    // store calibration data
+    calibrationResults['calibration_focus'] = collectResults(eyeTrackingData, fixationData)
+    submitResultsToCloud(calibrationResults);
+    resetWebGazerData();
+
+    // hide calibration points and clear canvas
     clearCalibrationCanvas();
 
     // hide WebGazer dot
@@ -836,7 +873,12 @@ function showTask(figure_id, survey_modal_id, delay_ms, next_task, send_data) {
         console.log(`Correct Answer for '${survey_modal_id}': '${correctAnswer}'`);
 
         // collect the data
-        resultsCollected[survey_modal_id] = collectResults(eyeTrackingData, fixationData, surveyAnswer);
+        survey_modal_answer_id = survey_modal_id + '-answer';
+        resultsCollected[survey_modal_answer_id] = collectResults(eyeTrackingData, fixationData);
+
+        Object.assign(resultsCollected[survey_modal_answer_id],
+                      {'survey_answer': surveyAnswer,
+                       'correct_survey_answer': correctAnswer});
 
         // submit results to the web app
         if (send_data) {
@@ -879,11 +921,19 @@ function showTask(figure_id, survey_modal_id, delay_ms, next_task, send_data) {
         console.log('Pause eye tracking...');
         webgazer.pause(); // pause WebGazer
 
+        // collect the data
+        resultsCollected[survey_modal_id + '-map'] = collectResults(eyeTrackingData, fixationData);
+        resetWebGazerData();
+
         // hide the figure
         hide_element(document.getElementById(figure_id));
 
         // display the survey
         console.log(`Show ${survey_modal_id}...`);
+
+        webgazer.resume();
+        // webgazer.setGazeListener(function(data, elapsedTime) {WebGazerListener(data, elapsedTime, true);});
+
         show_element(survey_modal);
 
         // next task will be performed when a survey button is pressed
