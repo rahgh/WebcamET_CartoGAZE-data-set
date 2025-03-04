@@ -210,17 +210,17 @@ input[type="checkbox"]:checked::after {
     }
 
     /* regular set of points */
-    #Pt1 { top: 25%; left: 20%; }
-    #Pt2 { top: 25%; left: 50%; }
-    #Pt3 { top: 25%; left: 80%; }
+    #Pt1 { top: 35%; left: 20%; }
+    #Pt2 { top: 35%; left: 50%; }
+    #Pt3 { top: 35%; left: 80%; }
 
-    #Pt4 { top: 50%; left: 20%; }
-    #Pt5 { top: 50%; left: 50%; }
-    #Pt6 { top: 50%; left: 80%; }
+    #Pt4 { top: 60%; left: 20%; }
+    #Pt5 { top: 60%; left: 50%; }
+    #Pt6 { top: 60%; left: 80%; }
 
-    #Pt7 { top: 75%; left: 20%; }
-    #Pt8 { top: 75%; left: 50%; }
-    #Pt9 { top: 75%; left: 80%; }
+    #Pt7 { top: 85%; left: 20%; }
+    #Pt8 { top: 85%; left: 50%; }
+    #Pt9 { top: 85%; left: 80%; }
 
 
 /* ============================= Maps and Survey Section ======================== */
