@@ -5,7 +5,6 @@ let resultsCollected = {}; // collection of results from tasks
 let previousGaze = null;
 let calibrationResults = {}; // variable to calibration eye-tracking data
 let calibrationAccuracy = 0; // variable to store calibration accuracy
-let gridPoint_center = {}; // central point of the calibration
 let PointCalibrate = 0;
 let CalibrationPoints = {};
 let lastEyeCheckTime_ms = Date.now();
@@ -473,13 +472,6 @@ function calPointClick(calib_node) {
             console.log(`Pt[${Pt_id}] at (x = ${x}, y = ${y})`);
         });
 
-        // coordinates of the central point of the calibration
-        console.log(`calPointClick: gridPoint_center = (x=${gridPoints.Pt5.x}, y=${gridPoints.Pt5.y})`);
-
-        gridPoint_center = {
-            'x': window.innerWidth * gridPoints['Pt5'].x / 100,
-            'y': window.innerHeight * gridPoints['Pt5'].y / 100};
-        
         calibrationResults['calibration_gridpoints'] = gridPoints;
 
         resetWebGazerData();
@@ -684,8 +676,8 @@ function calculatePrecision(past50Array) {
     var y50 = past50Array[1];
 
     // calculate the position of the point the user is staring at
-    var staringPointX = gridPoint_center.x
-    var staringPointY = gridPoint_center.y;
+    var staringPointX = windowWidth / 2;
+    var staringPointY = windowHeight / 2;
 
     var precisionPercentages = new Array(50);
     calculatePrecisionPercentages(precisionPercentages,
@@ -712,18 +704,16 @@ function calculatePrecision(past50Array) {
 function calculatePrecisionPercentages(precisionPercentages,
                                        windowWidth, windowHeight,
                                        x50, y50, staringPointX, staringPointY) {
-    console.log(`calculatePrecisionPercentages: staringPoint = (x=${staringPointX}, y=${staringPointX})`);
-    
-    for (i = 0; i < 50; i++) {
+    for (x = 0; x < 50; x++) {
         // calculate distance between each prediction and staring point
-        var xDiff = (staringPointX - x50[i]) / (0.5 * windowWidth);
-        var yDiff = (staringPointY - y50[i]) / (0.5 * windowHeight);
-        var err = Math.sqrt(2 * ((xDiff * xDiff) + (yDiff * yDiff)));
+        var xDiff = (staringPointX - x50[x]) / windowWidth;
+        var yDiff = (staringPointY - y50[x]) / windowHeight;
+        var rel_distance = Math.sqrt(2 * ((xDiff * xDiff) + (yDiff * yDiff)));
 
         // calculate precision percentage
         var precision = 0;
-        if (err < 1) {
-            precision = 1 - err;
+        if (rel_distance < 1) {
+            precision = 1 - rel_distance;
         } else {
             precision = 0;
         }
