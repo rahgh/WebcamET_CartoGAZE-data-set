@@ -1,6 +1,6 @@
 # Introduction
 
-This repository contains the source code for the experiment conducted as part of the research titled *"Use Cases and Limitations of Webcam-Based Eye Tracking for Cartography,"* a Master's thesis at the University of Salzburg, UNIGIS program. The experiment, accessible [here](https://rahgh.github.io/WebcamET_CartoGAZE-data-set-/), aimed to collect online eye-tracking data using webcam technology and consists of three sets of tasks (blocks), totaling 30 map stimuli. The structure of the blocks is as follows:
+This repository contains the source code for the experiment conducted as part of the research titled *"Use Cases and Limit of Webcam Eye Tracking for Cartography Research,"* a Master's thesis at the University of Salzburg, UNIGIS program. The experiment, accessible [here](https://rahgh.github.io/WebcamET_CartoGAZE-data-set-/), aimed to collect online eye-tracking data using webcam technology and consists of three sets of tasks (blocks), totaling 30 map stimuli. The structure of the blocks is as follows:
 
 - **Block 1:** 10 map stimuli focusing on the memorability of main roads and road junctions.  
 - **Block 2:** 10 map stimuli focusing on the memorability of major water bodies and rivers.  
