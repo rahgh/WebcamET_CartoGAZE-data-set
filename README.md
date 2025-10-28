@@ -9,3 +9,5 @@ The thesis explores webcam-based eye tracking as a low-cost, scalable alternativ
 
 The study involved 35 participants in an online experiment  accessible [here](https://rahgh.github.io/WebcamET_CartoGAZE-data-set/), with data from 28 participants analyzed after applying a 70% calibration accuracy threshold. Cognitive load was assessed using both behavioral metrics (response times, success rates) and eye-tracking metrics (average fixation duration, fixations per second, average saccade length).
 Results suggest that webcam-based eye tracking can replicate general attentional patterns observed in lab-based studies, but with reduced precision due to lower sampling rates (15–20 Hz vs. 250 Hz), environmental variability, and technical factors such as device differences and participant movement.
+You can read the full thesis here:
+👉 https://unigis.at/files/Mastertheses/Full/108393.pdf
